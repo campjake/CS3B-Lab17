@@ -56,7 +56,7 @@ _start:
 // with null-terminators
 	MOV	X0, X1				// *X0 = fileBuf
 	MOV	X1, 0xA				// X1 = LF (\n)
-	MOV	X2, 0x00			// X2 = null
+	MOV	X2, 0x0				// X2 = null
 	BL	String_replace		// Converts \n to 0x0
 
 // Convert asciz array to dbArr
@@ -68,10 +68,11 @@ _start:
 	MOV	X7, #2
 
 checkLength:
-	MOV		X1, 0x00			// Looking for null bit
+	MOV		X1, 0x0				// Looking for null byte
 	MOV		X2, X6				// From index [j]
 	BL		String_indexOf_2	// Check where the null bit is
-	CMP		X0, #3				// Check if third digit is null terminator
+	CMP		X0, #2				// Check if third digit is null terminator
+	ADD		X0, X11, X6			// Load next element to X0
 	BGT		threeDigit			// Branch to threeDigit for 128
 
 loop:
@@ -82,7 +83,7 @@ loop:
 	BGT		done				// Done if true
 	ADD		X6, X6, #3			// Increment iterator for string
 	ADD		X0, X11, X6			// Load next element to X0
-	B		loop				// Else continue loop
+	B		checkLength				// Else continue loop
 
 threeDigit:
 	BL		ascint64			// X0 = int
@@ -92,7 +93,7 @@ threeDigit:
 	BGT		done				// Done if true
 	ADD		X6, X6, #4			// Increment iterator for string
 	ADD		X0, X11, X6			// Load next element to X0
-	B		loop				// Else continue loop
+	B		checkLength				// Else continue loop
 
 done:
 // Call kernel to end program
