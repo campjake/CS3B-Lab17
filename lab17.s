@@ -47,7 +47,7 @@ _start:
 	LDR	X1,=fileBuf			// *X1 = fileBuf
 	LDR	X2,=iStrLen			// *X1 = 15
 	LDR	X2, [X2]			// X1 = 15
-	svc 0					// Service Call 0 (iosetup)
+	SVC 0					// Service Call 0 (iosetup)
 
 	MOV	X8, #CLOSE			// Close the file
 	SVC	0					// Service call 0 (iosetup)	
